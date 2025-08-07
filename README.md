@@ -6,6 +6,19 @@ Slimmed down version of
 </br>[M3U8 Video Detector and Downloader](https://greasyfork.org/en/scripts/449581-m3u8%E8%A7%86%E9%A2%91%E4%BE%A6%E6%B5%8B%E4%B8%8B%E8%BD%BD%E5%99%A8-%E8%87%AA%E5%8A%A8%E5%97%85%E6%8E%A2/code)
 </br>by [allFull](https://greasyfork.org/en/users/168235-allfull)
 
+![img](https://github.com/trasheap/m3u8-list-monkeyscript/blob/main/preview.png)
+
+### Features added:
+* Scrollable list
+* Copy full list to clipboard
+* Download list or link as .txt
+* Clear all or remove link
+
+
+### Features removed:
+* Download (didn't work for me)
+* Handling of magnet links
+
 ```js
 // ==UserScript==
 // @name         M3U8
