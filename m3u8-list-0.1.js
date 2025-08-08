@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         M3U8
 // @name:en      M3U8
-// @version      0.1
-// @description  Automatically detect the m3u8 video of the page and download it completely. Once detected the m3u8 link, it will appear in the upper right corner of the page.
+// @version      0.1.1
+// @description  Automatically detect the m3u8 video of the page, Once detected the m3u8 link will appear in the upper right corner of the page.
 // @author       allFull-n-Me
 // @namespace    http://tampermonkey.net/
 // @match        *://*/*
@@ -48,26 +48,31 @@
         xmlHttpRequest(details) {
             return ((typeof GM_xmlhttpRequest === "function") ? GM_xmlhttpRequest : GM.xmlHttpRequest)(details);
         },
-        download(details) {
-
-            return
-
-        },
         downloadTxt(text,defaultName) {
-            let filename = prompt("Enter a filename:", defaultName);
-            if (!filename) {
-                return; // User cancelled or entered nothing
+            let filename
+            let input = prompt("Enter a filename:", defaultName);
+            if (input) {
+                filename = sanitizeFilename(input);
             }
-
-            // Sanitize filename: remove illegal characters for most file systems
-            filename = filename.replace(/[<>:"/\\|?*\x00-\x1F]/g, '').trim();
-
-            // Optional: ensure it has a .txt extension
-            if (!filename.toLowerCase().endsWith('.txt')) {
-                filename += '.txt';
-            }
+            if (!filename) { mgmapi.message("File not saved", 4000, true); return;  }
 
             dowloadAsTxt(text,filename);
+
+            function sanitizeFilename(input) {
+                if (typeof input !== 'string') return '';
+
+                const reserved = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i;
+                let f = input.replace(/[<>:"/\\|?*\x00-\x1F]/g, '').trim();
+
+                f = f.replace(/[. ]+$/, '');
+
+                if (reserved.test(f))   { f = '_' + f; }
+                if (f.length > 255)     { f = f.substring(0, 255); }
+                if (f.length === 0)     { f = 'untitled'; }
+
+                return f;
+            }
+
             function dowloadAsTxt(text,filename) {
 
                 const _blob = new Blob([text], { type: 'text/plain' });
@@ -94,39 +99,61 @@
                 document.body.removeChild(copyFrom);
             }
         },
-        message(text, disappearTime = 5000) {
-            const id = "f8243rd238-gm-message-panel";
-            let p = document.querySelector(`#${id}`);
-            if (!p) {
-                p = document.createElement("div");
-                p.id = id;
-                p.style = `
-                    position: fixed;
-                    bottom: 20px;
-                    right: 20px;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: end;
-                    z-index: 999999999999999;
+        message: (() => {
+            // Private variables inside closure
+            let messageTimeout;
+            const panelId = "f8243rd238-gm-message-panel";
+            const messageId = "f8243rd239-gm-message-content";
+
+            return function message(text, disappearTime = 5000, error = false) {
+                let p = document.getElementById(panelId);
+
+                if (!p) {
+                    p = document.createElement("div");
+                    p.id = panelId;
+                    p.style = `
+                        position: fixed;
+                        top: 0.3em;
+                        right: 3.8em;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: end;
+                        z-index: 999999999999999;
+                    `;
+                    (document.body || document.documentElement).appendChild(p);
+                }
+
+                let mdiv = p.querySelector(`#${messageId}`);
+
+                if (!mdiv) {
+                    mdiv = document.createElement("div");
+                    mdiv.id = messageId;
+                    p.appendChild(mdiv);
+                }
+
+                mdiv.innerText = text;
+                mdiv.style = `
+                    padding: 5px 8px;
+                    border-radius: 5px;
+                    background: ${error ? "red" : "green"};
+                    margin-top: 10px;
+                    font-size: small;
+                    color: #fff;
+                    text-align: right;
                 `;
-                (document.body || document.documentElement).appendChild(p);
-            }
-            let mdiv = document.createElement("div");
-            mdiv.innerText = text;
-            mdiv.style = `
-                padding: 5px 8px;
-                border-radius: 5px;
-                background: green;
-                margin-top: 10px;
-                font-size: small;
-                color: #fff;
-                text-align: right;
-            `;
-            p.appendChild(mdiv);
-            setTimeout(() => {
-                p.removeChild(mdiv);
-            }, disappearTime);
-        }
+
+                if (messageTimeout) {
+                    clearTimeout(messageTimeout);
+                }
+
+                messageTimeout = setTimeout(() => {
+                    if (p && p.parentNode) {
+                        p.remove();
+                    }
+                    messageTimeout = null;
+                }, disappearTime);
+            };
+        })(),
     };
 
     if (location.host === "localhost:3000") {
@@ -143,7 +170,7 @@
             } catch (e) {
 
                 if (args.length == 1) {
-                    console.log(`+m3u8 tampermonkey+：${args[0]}`);
+                    // console.log(`!!!m3u8 tampermonkey!!!：${args[0]}`);
                     return await new Promise((resolve, reject) => {
                         let referer = new URLSearchParams(location.hash.slice(1)).get("referer");
                         let headers = {};
@@ -182,31 +209,6 @@
             }
         }
         return;
-    }
-
-    window.addEventListener("message", async (e) => {
-        if (e.data === "3j4t9uj349-gm-get-title") {
-            let name = `top-title-${Date.now()}`;
-            await mgmapi.setValue(name, document.title);
-            e.source.postMessage(`3j4t9uj349-gm-top-title-name:${name}`, "*");
-        }
-    });
-
-    function getTopTitle() {
-        return new Promise(resolve => {
-            window.addEventListener("message", async function l(e) {
-                if (typeof e.data === "string") {
-                    if (e.data.startsWith("3j4t9uj349-gm-top-title-name:")) {
-                        let name = e.data.slice("3j4t9uj349-gm-top-title-name:".length);
-                        await new Promise(r => setTimeout(r, 5));
-                        resolve(await mgmapi.getValue(name));
-                        mgmapi.deleteValue(name);
-                        window.removeEventListener("message", l);
-                    }
-                }
-            });
-            window.top.postMessage("3j4t9uj349-gm-get-title", "*");
-        });
     }
 
 
@@ -248,7 +250,8 @@
         }
 
         function checkContent(content) {
-            if (content.trim().startsWith("#EXTM3U")) {
+            // if ( (content.trim().startsWith("#EXTM3U")) || (content.trim().startsWith("#EXT-X-MEDIA:TYPE=SUBTITLES")) ) {
+            if ( content.trim().startsWith("#EXTM3U") ) {
                 return true;
             }
         }
@@ -271,88 +274,6 @@
     shadowDOM.appendChild(wrapper);
 
 
-    const bar = document.createElement("div");
-    bar.style = `
-        text-align: right;
-    `;
-    bar.innerHTML = `
-        <span
-            class="number-indicator"
-            data-number="0"
-            style="
-                display: inline-flex;
-                background: transparent;
-                border-radius: 15%;
-                margin-bottom: 0.08em;
-                cursor: pointer;
-                border: none;
-            "
-        >
-        </span>
-    `;
-    wrapper.appendChild(bar);
-
-    const downloadAllContainer = document.createElement("div");
-    downloadAllContainer.style.textAlign = "right";
-    downloadAllContainer.style.display = "block";
-    downloadAllContainer.style.marginBottom = ".08em";
-    downloadAllContainer.innerHTML = `
-
-        <span
-            class="clear-all-btn"
-            style="
-                display: inline-flex;
-                background: transparent;
-                font-size: .9rem;
-                padding: .5em;
-                cursor: pointer;
-                border: none;
-            "
-        >
-        🧹
-        </span>
-
-        <span
-            class="copy-all-btn"
-            style="
-                display: inline-flex;
-                background: transparent;
-                font-size: .9rem;
-                cursor: pointer;
-                border: none;
-                margin-left:1em;
-                padding: .5em;
-            "
-        >
-        📋
-        </span>
-
-        <span
-            class="download-all-btn"
-            style="
-                display: inline-flex;
-                background: transparent;
-                font-size: .9rem;
-                cursor: pointer;
-                border: none;
-                margin-left:1em;
-                padding: .5em;
-            "
-        >
-        💾
-        </span>
-    `;
-    wrapper.appendChild(downloadAllContainer);
-    const copyAll = downloadAllContainer.querySelector(".copy-all-btn")
-    const downloadAll = downloadAllContainer.querySelector(".download-all-btn")
-    const clearAll = downloadAllContainer.querySelector(".clear-all-btn")
-    const subwrapper = document.createElement("div");
-    subwrapper.style = `
-        overflow-y: auto;
-        max-height: 60dvh;
-        padding-right: 10px;
-    `;
-    wrapper.appendChild(subwrapper);
     const style = document.createElement("style");
 
     style.innerHTML = `
@@ -372,6 +293,17 @@
 
         .copy-link:active{
             color: #ccc;
+        }
+        .toggle-filter-btn,
+        .clear-all-btn,
+        .copy-all-btn,
+        .download-all-btn {
+            display: inline-flex;
+            background: transparent;
+            font-size: .9rem;
+            padding: .5em;
+            cursor: pointer;
+            border: none;
         }
 
         .download-btn:hover{
@@ -410,17 +342,67 @@
 
     wrapper.appendChild(style);
 
+    const bar = document.createElement("div");
+    bar.style = `
+        text-align: right;
+    `;
+    bar.innerHTML = `
+        <span
+            class="number-indicator"
+            data-number="0"
+            style="
+                display: inline-flex;
+                background: transparent;
+                border-radius: 15%;
+                margin-bottom: 0.08em;
+                cursor: pointer;
+                border: none;
+            "
+        >
+        </span>
+    `;
+    wrapper.appendChild(bar);
+
+    const menuBar = document.createElement("div");
+    menuBar.style.textAlign = "right";
+    menuBar.style.display = "none";
+    menuBar.style.marginBottom = ".08em";
+    menuBar.innerHTML = `
+        <span
+            class="toggle-filter-btn"
+        >Multi</span>
+        <span
+            class="clear-all-btn"
+        >🧹</span>
+        <span
+            class="copy-all-btn"
+        >📋</span>
+        <span
+            class="download-all-btn"
+        >💾</span>
+    `;
+    wrapper.appendChild(menuBar);
+    const toggleFilterBtn = menuBar.querySelector(".toggle-filter-btn");
+    const copyAll = menuBar.querySelector(".copy-all-btn")
+    const downloadAll = menuBar.querySelector(".download-all-btn")
+    const clearAll = menuBar.querySelector(".clear-all-btn")
+    const subwrapper = document.createElement("div");
+    subwrapper.style = `
+        overflow-y: auto;
+        max-height: 60dvh;
+        padding-right: 10px;
+    `;
+    wrapper.appendChild(subwrapper);
     const barBtn = bar.querySelector(".number-indicator");
 
     let shownUrls = [];
     let count = 0;
-
+    let filterEnabled
 
     (async function () {
 
         let shown = await GM_getValue("shown", true);
         wrapper.setAttribute("data-shown", shown);
-
         let x = await GM_getValue("x", 10);
         let y = await GM_getValue("y", 20);
 
@@ -433,6 +415,23 @@
         rootDiv.style.top = `${y}px`;
         rootDiv.style.right = `${x}px`;
 
+        filterEnabled = await mgmapi.getValue("filterMulti", false);
+        if (shown) {
+            menuBar.style.display = "block";
+        }
+
+        function updateToggleBtn() {
+            toggleFilterBtn.style.opacity = filterEnabled ? "1" : "0.3";
+        }
+
+        updateToggleBtn();
+
+        toggleFilterBtn.addEventListener("click", async () => {
+            filterEnabled = !filterEnabled;
+            await mgmapi.setValue("filterMulti", filterEnabled);
+            updateToggleBtn();
+            mgmapi.message(`Filter is now ${filterEnabled ? "ON" : "OFF"}`, 1500);
+        });
         barBtn.addEventListener("mousedown", e => {
             let startX = e.pageX;
             let startY = e.pageY;
@@ -466,10 +465,10 @@
                     wrapper.setAttribute("data-shown", shown);
 
                     if (shown) {
-                        downloadAllContainer.style.display = "block"
+                        menuBar.style.display = "block"
 
                     } else {
-                        downloadAllContainer.style.display = "none"
+                        menuBar.style.display = "none"
                     }
                 }
                 removeEventListener("mousemove", mousemove);
@@ -506,6 +505,7 @@
 
 
     function doVideos() {
+        if (filterEnabled) return;
         for (let v of Array.from(document.querySelectorAll("video"))) {
             if (v.duration && v.src && v.src.startsWith("http") && (!shownUrls.includes(v.src))) {
                 const src = v.src;
@@ -575,13 +575,17 @@
     }
 
 
+    
+    
     async function showVideo({
         type,
         url,
         duration,
         download
     }) {
-
+        if (filterEnabled) {
+            if (!duration.startsWith("Multi")) return;
+        }
         // if (!shownUrls.includes(url.href)) {
         let div = document.createElement("div");
         div.className = "m3u8-item";
@@ -592,26 +596,66 @@
                     cursor: pointer;
             ">🗑️</span>
             <span
+                style="
+                    margin-left: .35em;
+                    flex-grow: 1;
+                "
+            >${duration}</span>
+            <span
                 class="typeof-link"
                 style="
-                    margin-left: .3em;
+                    margin-left: .35em;
                 "
             >${type}</span>
             <span
                 class="copy-link"
                 title="${url}"
                 style="
-                    max-width: 200px;
+                    max-width: 10em;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
-                    margin-left: .3em;
+                    margin-left: .35em;
                     cursor: pointer;
                 "
             >${url.pathname}</span>
             <span
+                class="download-btn"
                 style="
-                    margin-left: .3em;
-                    flex-grow: 1;
-                "
-      
+                    margin-left: .35em;
+                    cursor: pointer;
+            ">💾</span>
+        `;
+
+        div.querySelector(".copy-link").addEventListener("click", () => {
+            mgmapi.copyText(url.href);
+            mgmapi.message("link copied!", 2000);
+        });
+
+        div.querySelector(".download-btn").addEventListener("click", download);
+
+        div.querySelector(".delete-btn").addEventListener("click", () => {
+            const index = shownUrls.indexOf(url.href);
+
+            if (index !== -1) {
+                shownUrls.splice(index, 1);
+            } else {
+                console.warn(`URL ${url.href} not found in shownUrls!`);
+            }
+
+            div.remove();
+
+            count--;
+            bar.querySelector(".number-indicator").setAttribute("data-number", count);
+
+            mgmapi.message("item deleted!", 2000);
+        });
+
+        rootDiv.style.display = "block";
+        count++;
+        shownUrls.push(url.href);
+        bar.querySelector(".number-indicator").setAttribute("data-number", count);
+        subwrapper.appendChild(div);
+        // }
+    }
+  })();
