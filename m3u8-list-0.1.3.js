@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         M3U8
 // @name:en      M3U8
-// @version      0.1.2
+// @version      0.1.3
 // @description  Automatically detect the m3u8 video of the page, Once detected the m3u8 link will appear in the upper right corner of the page.
 // @author       allFull-n-Me
 // @namespace    http://tampermonkey.net/
