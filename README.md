@@ -11,6 +11,7 @@ Slimmed down version of
 
 ### Features added:
 * Expose subtitles links (vtt and webvtt)
+  * webvtt likks are packed into a single item,</br>to avoid overpopulating the list
 * Scrollable list
 * Copy full list to clipboard
 * Download list or link as .txt
