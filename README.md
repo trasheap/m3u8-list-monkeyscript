@@ -1,6 +1,10 @@
 # Hobby project by someone who isn't a programmer
 ### Exposes m3u8, vtt, webwtt links
-
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_full.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_clear.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_save.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_copy.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_filter.png)
 ```js
 // ==UserScript==
 // @name         M3U8 + some subtitles
