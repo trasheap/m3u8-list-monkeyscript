@@ -7,7 +7,9 @@ Uses parts of [this script](https://greasyfork.org/en/scripts/449581-m3u8%E8%A7%
 * Copy link(s) to clipboard 
 * Filter found links in various ways
 * Move the window by pressing and moving the total-indicator in the upper right corner (should also work on touch devices)
-* TODO: Make window width changeable
+* TODO:
+  * Make window width changeable
+  * Fix some minor UI bugs
 
 ### NOTE:
 For convenience webvtt-items default to primarily copy/download the edited m3u8-content instead of the link to the m3u8 because of [this ffmpeg command](https://superuser.com/a/1829153):
