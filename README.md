@@ -6,6 +6,7 @@
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_save.png)
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_copy.png)
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_filter.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_field.png)
 ```js
 // ==UserScript==
 // @name         M3U8 + some subtitles
