@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.8
 // @description  Intercept and process M3U8, VTT, WEBVTT, and video URLs with pagination, filtering, processing, and UI display
-// @author       ChatGPT-n-me
+// @author       ChatGPT-allFull-n-me
 // @match        *://*/*
 // @grant        none
 // @require      https://cdn.jsdelivr.net/npm/m3u8-parser@4.7.1/dist/m3u8-parser.min.js
