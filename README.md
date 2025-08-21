@@ -1,5 +1,6 @@
 # Hobby project by someone who isn't a programmer
 ### Exposes m3u8, vtt, webwtt links
+Uses parts of [this script](https://greasyfork.org/en/scripts/449581-m3u8%E8%A7%86%E9%A2%91%E4%BE%A6%E6%B5%8B%E4%B8%8B%E8%BD%BD%E5%99%A8-%E8%87%AA%E5%8A%A8%E5%97%85%E6%8E%A2) by allFull
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_full.png)
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_settings.png)
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_clear.png)
