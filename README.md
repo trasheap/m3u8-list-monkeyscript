@@ -9,6 +9,7 @@ This is a hobby project by someone who isn't a programmer.
 * Copy link(s) to clipboard 
 * Filter found links in various ways
 * Move the window by pressing and moving the total-indicator in the upper right corner<br>(should also work on touch devices: did on mine)
+* Click the total-indicator to toggle compact/full view
 
 #### TODO
 * Make window width changeable
