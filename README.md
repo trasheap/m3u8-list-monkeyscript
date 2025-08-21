@@ -8,7 +8,7 @@ This is a hobby project by someone who isn't a programmer.
 * Download a copy of the link(s) as a text-file<br>(not the video/subtitles)
 * Copy link(s) to clipboard 
 * Filter found links in various ways
-* Move the window by pressing and moving the total-indicator in the upper right corner (should also work on touch devices)
+* Move the window by pressing and moving the total-indicator in the upper right corner<br>(should also work on touch devices: did on mine)
 
 #### TODO
 * Make window width changeable
