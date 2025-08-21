@@ -1,13 +1,13 @@
 # Hobby project by someone who isn't a programmer
-### Exposes m3u8, vtt, webwtt links
+
 Uses parts of [this script](https://greasyfork.org/en/scripts/449581-m3u8%E8%A7%86%E9%A2%91%E4%BE%A6%E6%B5%8B%E4%B8%8B%E8%BD%BD%E5%99%A8-%E8%87%AA%E5%8A%A8%E5%97%85%E6%8E%A2) by allFull
-![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_full.png)
-![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_settings.png)
-![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_clear.png)
-![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_save.png)
-![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_copy.png)
-![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_filter.png)
-![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_field.png)
+
+* Exposes m3u8, vtt, webwtt links
+* Download a copy of the link(s) as a text-file<br>(not the video/subtitles)
+* Copy link(s) to clipboard 
+* Filter found links in various ways
+* Move the window by pressing and moving the total-indicator in the upper right corner (should also work on touch devices)
+* TODO: Make window width changeable
 
 ### NOTE:
 For convenience webvtt-items default to primarily copy/download the edited m3u8-content instead of the link to the m3u8 because of [this ffmpeg command](https://superuser.com/a/1829153):
@@ -16,7 +16,17 @@ For convenience webvtt-items default to primarily copy/download the edited m3u8-
 ffmpeg -y -protocol_whitelist file,http,https,tcp,tls,crypto -allowed_extensions ALL -i playlist.m3u8 -c copy -f webvtt merged_segments.vvt
 ```
 
-Right click or long press the type to copy the link
+For webvtt: right click or long press the type to copy the m3u8-link
+
+
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_full.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_settings.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_clear.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_save.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_copy.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_filter.png)
+![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_field.png)
+
 
 
 ```js
