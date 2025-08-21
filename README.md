@@ -7,13 +7,24 @@
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_copy.png)
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_filter.png)
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_field.png)
+
+### NOTE:
+For convenience webvtt-items default to primarily copy/download the edited m3u8-content instead of the link to the m3u8 because of [this ffmpeg command](https://superuser.com/a/1829153):
+
+```bash
+ffmpeg -y -protocol_whitelist file,http,https,tcp,tls,crypto -allowed_extensions ALL -i playlist.m3u8 -c copy -f webvtt merged_segments.vvt
+```
+
+Right click or long press the type to copy the link
+
+
 ```js
 // ==UserScript==
 // @name         M3U8 + some subtitles
 // @namespace    http://tampermonkey.net/
 // @version      0.8
 // @description  Intercept and process M3U8, VTT, WEBVTT, and video URLs with pagination, filtering, processing, and UI display
-// @author       ChatGPT-n-me
+// @author       ChatGPT-allFull-n-me
 // @match        *://*/*
 // @grant        none
 // @require      https://cdn.jsdelivr.net/npm/m3u8-parser@4.7.1/dist/m3u8-parser.min.js
