@@ -1,18 +1,20 @@
-# Hobby project by someone who isn't a programmer
+# Exposes m3u8, vtt, webwtt links
 
 Uses parts of [this script](https://greasyfork.org/en/scripts/449581-m3u8%E8%A7%86%E9%A2%91%E4%BE%A6%E6%B5%8B%E4%B8%8B%E8%BD%BD%E5%99%A8-%E8%87%AA%E5%8A%A8%E5%97%85%E6%8E%A2) by allFull
 
-* Exposes m3u8, vtt, webwtt links
+---
+This is a hobby project by someone who isn't a programmer.
+### Functionality
 * Download a copy of the link(s) as a text-file<br>(not the video/subtitles)
 * Copy link(s) to clipboard 
 * Filter found links in various ways
 * Move the window by pressing and moving the total-indicator in the upper right corner (should also work on touch devices)
 
-#### TODO:
+#### TODO
 * Make window width changeable
 * Fix some minor UI bugs
 
-### NOTE:
+### NOTE
 For convenience webvtt-items default to primarily copy/download the edited m3u8-content instead of the link to the m3u8 because of [this ffmpeg command](https://superuser.com/a/1829153):
 
 ```bash
@@ -30,7 +32,7 @@ For webvtt: right click or long press the type to copy the m3u8-link
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_filter.png)
 ![img](https://raw.githubusercontent.com/trasheap/m3u8-list-monkeyscript/refs/heads/main/preview_field.png)
 
-
+### Easy copy
 
 ```js
 // ==UserScript==
